@@ -143,9 +143,9 @@ hi def link solEventArgSpecial   Label
 " Comment
 syn keyword solCommentTodo       TODO FIXME XXX TBD contained
 syn match solNatSpec             contained /@title\|@author\|@notice\|@dev\|@param\|@return/
-syn region  solLineComment       start=+\/\/+ end=+$+ contains=solCommentTodo,@Spell
+syn region  solLineComment       start=+\/\/+ end=+$+ contains=solCommentTodo,solNatSpec,@Spell
 syn region  solLineComment       start=+^\s*\/\/+ skip=+\n\s*\/\/+ end=+$+ contains=solCommentTodo,solNatSpec,@Spell fold
-syn region  solComment           start="/\*"  end="\*/" contains=solCommentTodo,@Spell fold
+syn region  solComment           start="/\*"  end="\*/" contains=solCommentTodo,solNatSpec,@Spell fold
 
 hi def link solCommentTodo       Todo
 hi def link solNatSpec           Label
