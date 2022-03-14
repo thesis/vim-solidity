@@ -113,7 +113,7 @@ syn match   solModifierName      contained /\<[a-zA-Z_$][0-9a-zA-Z_$]*/ nextgrou
 syn region  solModifierArgs      contained matchgroup=solFuncParens start='(' end=')' contains=solFuncArgCommas nextgroup=solModifierName,solFuncReturns,solFuncBody skipwhite
 syn region  solFuncReturns       contained matchgroup=solFuncParens nextgroup=solFuncBody start='(' end=')' contains=solFuncArgCommas,solBuiltinType skipwhite
 syn match   solFuncArgCommas     contained ','
-syn region  solFuncBody          start="{" end="}" fold transparent
+syn region  solFuncBody          start="{" end="}" transparent
 
 hi def link solFunction          Type
 hi def link solFuncName          Function
@@ -144,8 +144,8 @@ hi def link solEventArgSpecial   Label
 syn keyword solCommentTodo       TODO FIXME XXX TBD contained
 syn match solNatSpec             contained /@title\|@author\|@notice\|@dev\|@param\|@inheritdoc\|@return/
 syn region  solLineComment       start=+\/\/+ end=+$+ contains=solCommentTodo,solNatSpec,@Spell
-syn region  solLineComment       start=+^\s*\/\/+ skip=+\n\s*\/\/+ end=+$+ contains=solCommentTodo,solNatSpec,@Spell fold
-syn region  solComment           start="/\*"  end="\*/" contains=solCommentTodo,solNatSpec,@Spell fold
+syn region  solLineComment       start=+^\s*\/\/+ skip=+\n\s*\/\/+ end=+$+ contains=solCommentTodo,solNatSpec,@Spell
+syn region  solComment           start="/\*"  end="\*/" contains=solCommentTodo,solNatSpec,@Spell
 
 hi def link solCommentTodo       Todo
 hi def link solNatSpec           Label
