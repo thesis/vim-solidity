@@ -14,7 +14,7 @@ syn keyword solKeyword           delete do else emit enum external final for fun
 syn keyword solKeyword           interface internal is let match memory modifier new of payable pragma private public pure override virtual
 syn keyword solKeyword           relocatable return returns static storage struct throw try type typeof using
 syn keyword solKeyword           var view while
-syn keyword solBuiltinFunction    assert require revert gasleft now sha3 keccak256 sha256 ripemd160 ecrecover addmod mulmod selfdestruct
+syn keyword solAssemblyFuncs     stop add sub mul div sdiv mod smod exp not lt gt slt sgt eq iszero and or xor byte shl shr sar addmod mulmod signextend keccak256 pc pop mload mstore mstore8 sload sstore msize gas address balance selfbalance caller callvalue calldataload calldatasize calldatacopy codesize codecopy extcodesize extcodecopy returndatasize returndatacopy extcodehash create create2 call callcode delegatecall staticcall return revert selfdestruct invalid log0 log1 log2 log3 log4 chainid basefee origin gasprice blockhash coinbase timestamp number difficulty gaslimit
 syn keyword solConstant          true false wei szabo finney ether seconds minutes hours days weeks years now
 syn keyword solConstant          abi block blockhash msg tx this super selfdestruct
 syn keyword solBuiltinType       mapping address bool
@@ -93,6 +93,7 @@ hi def link solKeyword           Keyword
 hi def link solConstant          Constant
 hi def link solBuiltinType       Type
 hi def link solBuiltinFunction   Keyword
+hi def link solAssemblyFuncs     Keyword
 
 syn match   solOperator          /\(!\||\|&\|+\|-\|<\|>\|=\|%\|\/\|*\|\~\|\^\)/
 syn match   solNumber            /\<-\=\d\+L\=\>\|\<0[xX]\x\+\>/
