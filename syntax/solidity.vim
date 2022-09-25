@@ -122,7 +122,7 @@ hi def link solModifierName      Function
 
 " Yul blocks
 syn match   yul                  /\<assembly\>/ skipwhite skipempty nextgroup=yulBody
-syn region  yulBody              contained start='{' end='}' fold contains=yulAssemblyOp,solNumber,yulVarDeclaration skipwhite skipempty transparent
+syn region  yulBody              contained start='{' end='}' fold contains=yulAssemblyOp,solNumber,yulVarDeclaration,solLineComment,solComment skipwhite skipempty
 syn keyword yulAssemblyOp        contained stop add sub mul div sdiv mod smod exp not lt gt slt sgt eq iszero and or xor byte shl shr sar addmod mulmod signextend keccak256 pc pop mload mstore mstore8 sload sstore msize gas address balance selfbalance caller callvalue calldataload calldatasize calldatacopy codesize codecopy extcodesize extcodecopy returndatasize returndatacopy extcodehash create create2 call callcode delegatecall staticcall return revert selfdestruct invalid log0 log1 log2 log3 log4 chainid basefee origin gasprice blockhash coinbase timestamp number difficulty gaslimit
 syn keyword yulVarDeclaration    contained let
 
