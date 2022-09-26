@@ -23,7 +23,7 @@ Plugin 'thesis/vim-solidity'
 Add the following line to your `~/.vimrc`:
 
 ```vim
-Plug 'thesis/vim-solidity'
+Plug 'thesis/vim-solidity', {'branch': 'main' }
 ```
 
 ### No Plugin Manager
