@@ -1,4 +1,3 @@
-setlocal comments-=://
-setlocal comments+=:///,://
+setlocal comments=s1:/*,mb:*,ex:*/,:///,://
 setlocal commentstring=//\ %s
-setlocal formatoptions+=c formatoptions+=r formatoptions+=o
+setlocal formatoptions+=croqn
