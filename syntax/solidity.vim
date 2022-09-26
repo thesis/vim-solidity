@@ -1,8 +1,7 @@
-
 " Vim syntax file
 " Language:     Solidity
-" Maintainer:   Philogy
-" URL:          https://github.com/philogy/vim-solidity
+" Maintainer:   Thesis
+" URL:          https://github.com/thesis/vim-solidity
 
 if exists("b:current_syntax")
   finish
