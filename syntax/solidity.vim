@@ -1,7 +1,8 @@
+
 " Vim syntax file
 " Language:     Solidity
-" Maintainer:   Thesis
-" URL:          https://github.com/thesis/vim-solidity
+" Maintainer:   Philogy
+" URL:          https://github.com/philogy/vim-solidity
 
 if exists("b:current_syntax")
   finish
@@ -9,12 +10,12 @@ endif
 
 " basic
 " contract, library and event are defined at bottom of file
-syn keyword solKeyword           abstract anonymous as assembly break calldata case catch constant constructor continue default
+syn keyword solKeyword           abstract anonymous as break calldata case catch constant constructor continue default switch revert require
+syn keyword solKeyword           ecrecover addmod mulmod keccak256
 syn keyword solKeyword           delete do else emit enum external final for function if immutable import in indexed inline
 syn keyword solKeyword           interface internal is let match memory modifier new of payable pragma private public pure override virtual
 syn keyword solKeyword           relocatable return returns static storage struct throw try type typeof using
 syn keyword solKeyword           var view while
-syn keyword solBuiltinFunction    assert require revert gasleft now sha3 keccak256 sha256 ripemd160 ecrecover addmod mulmod selfdestruct
 syn keyword solConstant          true false wei szabo finney ether seconds minutes hours days weeks years now
 syn keyword solConstant          abi block blockhash msg tx this super selfdestruct
 syn keyword solBuiltinType       mapping address bool
@@ -118,6 +119,16 @@ syn region  solFuncBody          start="{" end="}" fold transparent
 hi def link solFunction          Type
 hi def link solFuncName          Function
 hi def link solModifierName      Function
+
+" Yul blocks
+syn match   yul                  /\<assembly\>/ skipwhite skipempty nextgroup=yulBody
+syn region  yulBody              contained start='{' end='}' fold contains=yulAssemblyOp,solNumber,yulVarDeclaration,solLineComment,solComment skipwhite skipempty
+syn keyword yulAssemblyOp        contained stop add sub mul div sdiv mod smod exp not lt gt slt sgt eq iszero and or xor byte shl shr sar addmod mulmod signextend keccak256 pc pop mload mstore mstore8 sload sstore msize gas address balance selfbalance caller callvalue calldataload calldatasize calldatacopy codesize codecopy extcodesize extcodecopy returndatasize returndatacopy extcodehash create create2 call callcode delegatecall staticcall return revert selfdestruct invalid log0 log1 log2 log3 log4 chainid basefee origin gasprice blockhash coinbase timestamp number difficulty gaslimit
+syn keyword yulVarDeclaration    contained let
+
+hi def link yul                 Keyword
+hi def link yulVarDeclaration   Keyword
+hi def link yulAssemblyOp       Keyword
 
 " Contract
 syn match   solContract          /\<\%(contract\|library\|interface\)\>/ nextgroup=solContractName skipwhite
