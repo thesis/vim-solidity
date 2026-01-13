@@ -4,16 +4,9 @@ set nocompatible
 " Add vader.vim to runtimepath
 set rtp+=test/vader.vim
 
-" Add vim-solidity to runtimepath
-set rtp+=.
+" Add vim-solidity to runtimepath (PREPEND to override system files)
+set rtp^=.
 
 " Load filetype detection, plugins, and indent
 filetype plugin indent on
 syntax enable
-
-" Helper function to get syntax group at cursor
-function! SyntaxOf(pattern)
-  let l:line = search(a:pattern, 'cn')
-  let l:col = match(getline(l:line), a:pattern) + 1
-  return synIDattr(synID(l:line, l:col, 1), 'name')
-endfunction

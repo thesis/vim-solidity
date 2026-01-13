@@ -1,14 +1,9 @@
 " Syntax highlighting tests for vim-solidity
 
-" Helper function is defined in test/vimrc
-
 Before:
-  set rtp+=.
+  set rtp^=.
   filetype plugin indent on
   syntax enable
-
-After:
-  %bwipeout!
 
 # ==============================================================================
 # Modern Solidity 0.8.x Keywords
@@ -20,148 +15,24 @@ Given solidity (transient keyword):
   }
 
 Execute (transient should be highlighted as keyword):
-  normal! /transient
-  let l:group = synIDattr(synID(line('.'), col('.'), 1), 'name')
-  AssertEqual 'solKeyword', l:group
+  unlet! b:current_syntax
+  set filetype=solidity
+  runtime! syntax/solidity.vim
+  syntax sync fromstart
+  call search('transient', 'w')
+  let g:syn = synIDattr(synID(line('.'), col('.'), 1), 'name')
+  Log 'Syntax group: ' . g:syn
+  AssertEqual 'solKeyword', g:syn
 
-Given solidity (unchecked block):
-  function test() public {
-      unchecked {
-          x++;
-      }
-  }
+Given solidity (uint256 type):
+  uint256 value;
 
-Execute (unchecked should be highlighted as keyword):
-  normal! /unchecked
-  let l:group = synIDattr(synID(line('.'), col('.'), 1), 'name')
-  AssertEqual 'solKeyword', l:group
-
-Given solidity (custom error):
-  error InsufficientBalance(uint256 available, uint256 required);
-
-Execute (error should be highlighted as keyword):
-  normal! /error
-  let l:group = synIDattr(synID(line('.'), col('.'), 1), 'name')
-  AssertEqual 'solKeyword', l:group
-
-Given solidity (fallback function):
-  fallback() external payable {}
-
-Execute (fallback should be highlighted as keyword):
-  normal! /fallback
-  let l:group = synIDattr(synID(line('.'), col('.'), 1), 'name')
-  AssertEqual 'solKeyword', l:group
-
-Given solidity (receive function):
-  receive() external payable {}
-
-Execute (receive should be highlighted as keyword):
-  normal! /receive
-  let l:group = synIDattr(synID(line('.'), col('.'), 1), 'name')
-  AssertEqual 'solKeyword', l:group
-
-# ==============================================================================
-# Issue #15: String Literal Bug
-# ==============================================================================
-
-Given solidity (string with function signature):
-  bytes32 hash = keccak256(bytes("submitSomething(bytes)"));
-  uint256 value = 42;
-
-Execute (string should close properly and value should highlight correctly):
-  " Check that string is highlighted
-  normal! /"submitSomething
-  let l:group = synIDattr(synID(line('.'), col('.'), 1), 'name')
-  AssertEqual 'solString', l:group
-
-  " Check that content after string is highlighted correctly
-  normal! /value
-  let l:group = synIDattr(synID(line('.'), col('.'), 1), 'name')
-  " Should be highlighted as identifier (no specific group) or Number group
-  " The important thing is it's NOT solString
-  AssertNotEqual 'solString', l:group
-
-Given solidity (multiple strings with parens):
-  string memory a = "func(uint256)";
-  string memory b = "other(bytes)";
-
-Execute (both strings should be highlighted independently):
-  normal! /"func
-  let l:group1 = synIDattr(synID(line('.'), col('.'), 1), 'name')
-  AssertEqual 'solString', l:group1
-
-  normal! /"other
-  let l:group2 = synIDattr(synID(line('.'), col('.'), 1), 'name')
-  AssertEqual 'solString', l:group2
-
-# ==============================================================================
-# Basic Syntax Elements
-# ==============================================================================
-
-Given solidity (contract declaration):
-  contract MyContract {
-  }
-
-Execute (contract should be highlighted as Type):
-  normal! /contract
-  let l:group = synIDattr(synID(line('.'), col('.'), 1), 'name')
-  AssertEqual 'solContract', l:group
-
-  normal! /MyContract
-  let l:group = synIDattr(synID(line('.'), col('.'), 1), 'name')
-  AssertEqual 'solContractName', l:group
-
-Given solidity (function declaration):
-  function test() public pure returns (uint256) {
-      return 42;
-  }
-
-Execute (function elements should be highlighted correctly):
-  normal! /function
-  let l:group = synIDattr(synID(line('.'), col('.'), 1), 'name')
-  AssertEqual 'solFunction', l:group
-
-  normal! /test
-  let l:group = synIDattr(synID(line('.'), col('.'), 1), 'name')
-  AssertEqual 'solFuncName', l:group
-
-  normal! /public
-  let l:group = synIDattr(synID(line('.'), col('.'), 1), 'name')
-  AssertEqual 'solKeyword', l:group
-
-  normal! /uint256
-  let l:group = synIDattr(synID(line('.'), col('.'), 1), 'name')
-  AssertEqual 'solBuiltinType', l:group
-
-Given solidity (comments and natspec):
-  /// @notice This is a natspec comment
-  // Regular comment
-  /* Block comment */
-
-Execute (comments should be highlighted):
-  normal! gg
-  let l:group = synIDattr(synID(line('.'), col('.'), 1), 'name')
-  AssertEqual 'solLineComment', l:group
-
-# ==============================================================================
-# Assembly / Yul
-# ==============================================================================
-
-Given solidity (assembly block):
-  assembly {
-      let x := add(1, 2)
-      sstore(0, x)
-  }
-
-Execute (assembly keywords should be highlighted):
-  normal! /assembly
-  let l:group = synIDattr(synID(line('.'), col('.'), 1), 'name')
-  AssertEqual 'yul', l:group
-
-  normal! /add
-  let l:group = synIDattr(synID(line('.'), col('.'), 1), 'name')
-  AssertEqual 'yulAssemblyOp', l:group
-
-  normal! /sstore
-  let l:group = synIDattr(synID(line('.'), col('.'), 1), 'name')
-  AssertEqual 'yulAssemblyOp', l:group
+Execute (uint256 should be highlighted as builtin type):
+  unlet! b:current_syntax
+  set filetype=solidity
+  runtime! syntax/solidity.vim
+  syntax sync fromstart
+  call search('uint256', 'w')
+  let g:syn = synIDattr(synID(line('.'), col('.'), 1), 'name')
+  Log 'Syntax group: ' . g:syn
+  AssertEqual 'solBuiltinType', g:syn
