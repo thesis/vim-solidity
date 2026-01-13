@@ -131,10 +131,11 @@ hi def link yulAssemblyOp       Keyword
 
 " Contract
 syn match   solContract          /\<\%(contract\|library\|interface\)\>/ nextgroup=solContractName skipwhite
-syn match   solContractName      contained /\<[a-zA-Z_$][0-9a-zA-Z_$]*/ nextgroup=solContractParent skipwhite
-syn region  solContractParent    contained start='is' end='{' contains=solContractName,solContractNoise,solContractCommas skipwhite skipempty
+syn match   solContractName      contained /\<[a-zA-Z_$][0-9a-zA-Z_$]*/ nextgroup=solContractParent,solContractBody skipwhite
+syn region  solContractParent    contained start='is' end='{' contains=solContractName,solContractNoise,solContractCommas nextgroup=solContractBody skipwhite skipempty
 syn match   solContractNoise     contained 'is' containedin=solContractParent
 syn match   solContractCommas    contained ','
+syn region  solContractBody      contained start='{' end='}' fold transparent
 
 hi def link solContract          Type
 hi def link solContractName      Function
