@@ -97,13 +97,15 @@ hi def link solBuiltinFunction   Keyword
 syn match   solOperator          /\(!\||\|&\|+\|-\|<\|>\|=\|%\|\/\|*\|\~\|\^\)/
 syn match   solNumber            /\<-\=\d\+L\=\>\|\<0[xX]\x\+\>/
 syn match   solFloat             /\<-\=\%(\d\+\.\d\+\|\d\+\.\|\.\d\+\)\%([eE][+-]\=\d\+\)\=\>/
-syn region  solString            start=+"+  skip=+\\\\\|\\$"\|\\"+  end=+"+
-syn region  solString            start=+'+  skip=+\\\\\|\\$'\|\\'+  end=+'+
+syn region  solString            start=+"+  skip=+\\\\\|\\"+  end=+"+  contains=solStringEscape
+syn region  solString            start=+'+  skip=+\\\\\|\\'+  end=+'+  contains=solStringEscape
+syn match   solStringEscape      contained +\\[nrt\\'"]+
 
 hi def link solOperator          Operator
 hi def link solNumber            Number
 hi def link solFloat             Float
 hi def link solString            String
+hi def link solStringEscape      SpecialChar
 
 " Function
 syn match   solFunction          /\<function\>/ nextgroup=solFuncName,solFuncArgs skipwhite
