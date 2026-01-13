@@ -1,0 +1,41 @@
+name: Test
+
+on:
+  push:
+    branches: [ main, revamp ]
+  pull_request:
+    branches: [ main, revamp ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Vim
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y vim
+
+      - name: Clone vader.vim
+        run: |
+          git clone --depth 1 https://github.com/junegunn/vader.vim.git test/vader.vim
+
+      - name: Run syntax tests
+        run: |
+          vim -Nu test/vimrc -c 'Vader! test/vader/syntax.vader'
+
+      - name: Run folding tests
+        run: |
+          vim -Nu test/vimrc -c 'Vader! test/vader/folding.vader'
+
+      - name: Run indentation tests
+        run: |
+          vim -Nu test/vimrc -c 'Vader! test/vader/indent.vader'
+
+      - name: Test summary
+        if: always()
+        run: |
+          echo "✓ All tests completed"

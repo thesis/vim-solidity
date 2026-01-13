@@ -1,0 +1,176 @@
+" Indentation tests for vim-solidity
+
+Before:
+  set rtp+=.
+  filetype plugin indent on
+  syntax enable
+
+After:
+  %bwipeout!
+
+# ==============================================================================
+# Basic Indentation
+# ==============================================================================
+
+Given solidity (contract with function):
+  contract Test {
+  function foo() public {
+  uint256 x = 1;
+  }
+  }
+
+Execute (indent entire buffer):
+  normal! gg=G
+
+Expect solidity (properly indented):
+  contract Test {
+      function foo() public {
+          uint256 x = 1;
+      }
+  }
+
+# ==============================================================================
+# Multi-line Function Signature (Issue #5)
+# ==============================================================================
+
+Given solidity (multi-line function signature):
+  function test(
+  uint256 arg1,
+  address arg2
+  ) public returns (uint256) {
+  return arg1;
+  }
+
+Execute (indent entire buffer):
+  normal! gg=G
+
+Expect solidity (properly indented multi-line):
+  function test(
+      uint256 arg1,
+      address arg2
+  ) public returns (uint256) {
+      return arg1;
+  }
+
+# ==============================================================================
+# Multi-line Function Call (Issue #5)
+# ==============================================================================
+
+Given solidity (multi-line function call):
+  function test() public {
+  someFunction(
+  arg1,
+  arg2,
+  arg3
+  );
+  }
+
+Execute (indent entire buffer):
+  normal! gg=G
+
+Expect solidity (properly indented call):
+  function test() public {
+      someFunction(
+          arg1,
+          arg2,
+          arg3
+      );
+  }
+
+# ==============================================================================
+# Event Definition (Issue #5)
+# ==============================================================================
+
+Given solidity (multi-line event):
+  event Transfer(
+  address indexed from,
+  address indexed to,
+  uint256 value
+  );
+
+Execute (indent entire buffer):
+  normal! gg=G
+
+Expect solidity (properly indented event):
+  event Transfer(
+      address indexed from,
+      address indexed to,
+      uint256 value
+  );
+
+# ==============================================================================
+# If/Else Blocks
+# ==============================================================================
+
+Given solidity (if else blocks):
+  function test() public {
+  if (condition) {
+  doSomething();
+  } else {
+  doSomethingElse();
+  }
+  }
+
+Execute (indent entire buffer):
+  normal! gg=G
+
+Expect solidity (properly indented if/else):
+  function test() public {
+      if (condition) {
+          doSomething();
+      } else {
+          doSomethingElse();
+      }
+  }
+
+# ==============================================================================
+# Nested Blocks
+# ==============================================================================
+
+Given solidity (nested blocks):
+  contract Test {
+  function outer() public {
+  if (true) {
+  for (uint i = 0; i < 10; i++) {
+  inner();
+  }
+  }
+  }
+  }
+
+Execute (indent entire buffer):
+  normal! gg=G
+
+Expect solidity (properly indented nested blocks):
+  contract Test {
+      function outer() public {
+          if (true) {
+              for (uint i = 0; i < 10; i++) {
+                  inner();
+              }
+          }
+      }
+  }
+
+# ==============================================================================
+# Assembly Blocks
+# ==============================================================================
+
+Given solidity (assembly block):
+  function test() public {
+  assembly {
+  let x := 1
+  sstore(0, x)
+  }
+  }
+
+Execute (indent entire buffer):
+  normal! gg=G
+
+Expect solidity (properly indented assembly):
+  function test() public {
+      assembly {
+          let x := 1
+          sstore(0, x)
+      }
+  }

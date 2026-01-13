@@ -1,0 +1,87 @@
+" Code folding tests for vim-solidity
+
+Before:
+  set rtp+=.
+  filetype plugin indent on
+  syntax enable
+  set foldmethod=syntax
+  set foldlevel=0
+
+After:
+  %bwipeout!
+  set foldmethod=manual
+
+# ==============================================================================
+# Function Folding
+# ==============================================================================
+
+Given solidity (function with body):
+  function test() public {
+      uint256 x = 1;
+      uint256 y = 2;
+      return x + y;
+  }
+
+Execute (function body should be foldable):
+  normal! gg
+  " Check that fold exists
+  let l:foldlevel = foldlevel(1)
+  AssertNotEqual 0, l:foldlevel
+
+# ==============================================================================
+# Contract Folding (Issue #11)
+# ==============================================================================
+
+Given solidity (contract with body):
+  contract MyContract {
+      uint256 public value;
+
+      function setValue(uint256 _value) public {
+          value = _value;
+      }
+  }
+
+Execute (contract body should be foldable):
+  normal! gg
+  " Find the opening brace line
+  normal! /{
+  let l:contract_line = line('.')
+  " Contract body should have a fold
+  let l:foldlevel = foldlevel(l:contract_line + 1)
+  " If contract folding is working, there should be a fold level
+  AssertNotEqual 0, l:foldlevel
+
+# ==============================================================================
+# Assembly Folding
+# ==============================================================================
+
+Given solidity (assembly block):
+  function test() public {
+      assembly {
+          let x := 1
+          let y := 2
+      }
+  }
+
+Execute (assembly block should be foldable):
+  normal! /assembly
+  normal! /{
+  let l:asm_line = line('.')
+  let l:foldlevel = foldlevel(l:asm_line + 1)
+  AssertNotEqual 0, l:foldlevel
+
+# ==============================================================================
+# Multi-line Comment Folding
+# ==============================================================================
+
+Given solidity (multi-line comment):
+  /*
+   * This is a multi-line comment
+   * with several lines
+   */
+
+Execute (multi-line comment should be foldable):
+  normal! gg
+  let l:foldlevel = foldlevel(1)
+  " Comments should have fold support
+  AssertNotEqual 0, l:foldlevel
