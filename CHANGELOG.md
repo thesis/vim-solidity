@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Nothing yet - next release will be 0.9.0 with Foundry tooling integration.
+
+## [0.8.0] - 2026-01-13
+
+**Major release with modern Solidity 0.8.x support and testing infrastructure**
+
 ### Added
 - Comprehensive testing infrastructure with vader.vim
 - GitHub Actions CI for automated testing
@@ -26,6 +32,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Contract bodies can now be folded (Issue #11)
+- String literal syntax highlighting after function signatures (Issue #15)
+
+### Known Issues
+- Indentation for some multi-line constructs may need manual adjustment (Issue #5)
+  - The indent logic is based on JavaScript and works well for most cases
+  - Complex multi-line function signatures with modifiers may need refinement
+  - Contributions welcome to improve edge cases
 
 ### Changed
 - Enhanced ftdetect to recognize Foundry file naming conventions
