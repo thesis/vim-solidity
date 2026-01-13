@@ -11,9 +11,9 @@ endif
 " contract, library and event are defined at bottom of file
 syn keyword solKeyword           abstract anonymous as break calldata case catch constant constructor continue default switch revert require
 syn keyword solKeyword           ecrecover addmod mulmod keccak256
-syn keyword solKeyword           delete do else emit enum external final for function if immutable import in indexed inline
+syn keyword solKeyword           delete do else emit enum error external fallback final for function global if immutable import in indexed inline
 syn keyword solKeyword           interface internal is let match memory modifier new of payable pragma private public pure override virtual
-syn keyword solKeyword           relocatable return returns static storage struct throw try type typeof using
+syn keyword solKeyword           receive relocatable return returns static storage struct throw transient try type typeof unchecked using
 syn keyword solKeyword           var view while
 syn keyword solConstant          true false wei szabo finney ether seconds minutes hours days weeks years now
 syn keyword solConstant          abi block blockhash msg tx this super selfdestruct
@@ -138,6 +138,16 @@ syn match   solContractCommas    contained ','
 
 hi def link solContract          Type
 hi def link solContractName      Function
+
+" User-defined value types (0.8.18+)
+" Matches: type UFixed256x18 is uint256;
+syn match   solTypeDefinition    /\<type\>/ nextgroup=solTypeDefName skipwhite
+syn match   solTypeDefName       contained /\<[a-zA-Z_$][0-9a-zA-Z_$]*/ nextgroup=solTypeDefIs skipwhite
+syn keyword solTypeDefIs         contained is nextgroup=solBuiltinType skipwhite
+
+hi def link solTypeDefinition    Keyword
+hi def link solTypeDefName       Type
+hi def link solTypeDefIs         Keyword
 
 " Event
 syn match   solEvent             /\<event\>/ nextgroup=solEventName,solEventArgs skipwhite
