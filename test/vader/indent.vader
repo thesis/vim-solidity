@@ -1,12 +1,9 @@
 " Indentation tests for vim-solidity
 
 Before:
-  set rtp+=.
+  set rtp^=.
   filetype plugin indent on
   syntax enable
-
-After:
-  %bwipeout!
 
 # ==============================================================================
 # Basic Indentation
