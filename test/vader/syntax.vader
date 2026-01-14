@@ -1,0 +1,38 @@
+" Syntax highlighting tests for vim-solidity
+
+Before:
+  set rtp^=.
+  filetype plugin indent on
+  syntax enable
+
+# ==============================================================================
+# Modern Solidity 0.8.x Keywords
+# ==============================================================================
+
+Given solidity (transient keyword):
+  contract Test {
+      transient uint256 value;
+  }
+
+Execute (transient should be highlighted as keyword):
+  unlet! b:current_syntax
+  set filetype=solidity
+  runtime! syntax/solidity.vim
+  syntax sync fromstart
+  call search('transient', 'w')
+  let g:syn = synIDattr(synID(line('.'), col('.'), 1), 'name')
+  Log 'Syntax group: ' . g:syn
+  AssertEqual 'solKeyword', g:syn
+
+Given solidity (uint256 type):
+  uint256 value;
+
+Execute (uint256 should be highlighted as builtin type):
+  unlet! b:current_syntax
+  set filetype=solidity
+  runtime! syntax/solidity.vim
+  syntax sync fromstart
+  call search('uint256', 'w')
+  let g:syn = synIDattr(synID(line('.'), col('.'), 1), 'name')
+  Log 'Syntax group: ' . g:syn
+  AssertEqual 'solBuiltinType', g:syn

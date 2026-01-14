@@ -11,9 +11,9 @@ endif
 " contract, library and event are defined at bottom of file
 syn keyword solKeyword           abstract anonymous as break calldata case catch constant constructor continue default switch revert require
 syn keyword solKeyword           ecrecover addmod mulmod keccak256
-syn keyword solKeyword           delete do else emit enum external final for function if immutable import in indexed inline
+syn keyword solKeyword           delete do else emit enum error external fallback final for function global if immutable import in indexed inline
 syn keyword solKeyword           interface internal is let match memory modifier new of payable pragma private public pure override virtual
-syn keyword solKeyword           relocatable return returns static storage struct throw try type typeof using
+syn keyword solKeyword           receive relocatable return returns static storage struct throw transient try type typeof unchecked using
 syn keyword solKeyword           var view while
 syn keyword solConstant          true false wei szabo finney ether seconds minutes hours days weeks years now
 syn keyword solConstant          abi block blockhash msg tx this super selfdestruct
@@ -97,13 +97,15 @@ hi def link solBuiltinFunction   Keyword
 syn match   solOperator          /\(!\||\|&\|+\|-\|<\|>\|=\|%\|\/\|*\|\~\|\^\)/
 syn match   solNumber            /\<-\=\d\+L\=\>\|\<0[xX]\x\+\>/
 syn match   solFloat             /\<-\=\%(\d\+\.\d\+\|\d\+\.\|\.\d\+\)\%([eE][+-]\=\d\+\)\=\>/
-syn region  solString            start=+"+  skip=+\\\\\|\\$"\|\\"+  end=+"+
-syn region  solString            start=+'+  skip=+\\\\\|\\$'\|\\'+  end=+'+
+syn region  solString            start=+"+  skip=+\\\\\|\\"+  end=+"+  contains=solStringEscape
+syn region  solString            start=+'+  skip=+\\\\\|\\'+  end=+'+  contains=solStringEscape
+syn match   solStringEscape      contained +\\[nrt\\'"]+
 
 hi def link solOperator          Operator
 hi def link solNumber            Number
 hi def link solFloat             Float
 hi def link solString            String
+hi def link solStringEscape      SpecialChar
 
 " Function
 syn match   solFunction          /\<function\>/ nextgroup=solFuncName,solFuncArgs skipwhite
@@ -113,7 +115,7 @@ syn match   solModifierName      contained /\<[a-zA-Z_$][0-9a-zA-Z_$]*/ nextgrou
 syn region  solModifierArgs      contained matchgroup=solFuncParens start='(' end=')' contains=solFuncArgCommas nextgroup=solModifierName,solFuncReturns,solFuncBody skipwhite
 syn region  solFuncReturns       contained matchgroup=solFuncParens nextgroup=solFuncBody start='(' end=')' contains=solFuncArgCommas,solBuiltinType skipwhite
 syn match   solFuncArgCommas     contained ','
-syn region  solFuncBody          start="{" end="}" fold transparent
+syn region  solFuncBody          contained start="{" end="}" fold transparent
 
 hi def link solFunction          Type
 hi def link solFuncName          Function
@@ -130,14 +132,25 @@ hi def link yulVarDeclaration   Keyword
 hi def link yulAssemblyOp       Keyword
 
 " Contract
-syn match   solContract          /\<\%(contract\|library\|interface\)\>/ nextgroup=solContractName skipwhite
-syn match   solContractName      contained /\<[a-zA-Z_$][0-9a-zA-Z_$]*/ nextgroup=solContractParent skipwhite
-syn region  solContractParent    contained start='is' end='{' contains=solContractName,solContractNoise,solContractCommas skipwhite skipempty
+syn match   solContract          /\<\%(contract\|library\|interface\)\>/ nextgroup=solContractName skipwhite skipnl skipempty
+syn match   solContractName      contained /\<[a-zA-Z_$][0-9a-zA-Z_$]*/ nextgroup=solContractBlock,solContractParent skipwhite skipnl skipempty
+syn region  solContractParent    contained start='is' end='{' contains=solContractName,solContractNoise,solContractCommas nextgroup=solContractBlock skipwhite skipempty
 syn match   solContractNoise     contained 'is' containedin=solContractParent
 syn match   solContractCommas    contained ','
+syn region  solContractBlock     contained matchgroup=Delimiter start='{' end='}' fold transparent
 
 hi def link solContract          Type
 hi def link solContractName      Function
+
+" User-defined value types (0.8.18+)
+" Matches: type UFixed256x18 is uint256;
+syn match   solTypeDefinition    /\<type\>/ nextgroup=solTypeDefName skipwhite
+syn match   solTypeDefName       contained /\<[a-zA-Z_$][0-9a-zA-Z_$]*/ nextgroup=solTypeDefIs skipwhite
+syn keyword solTypeDefIs         contained is nextgroup=solBuiltinType skipwhite
+
+hi def link solTypeDefinition    Keyword
+hi def link solTypeDefName       Type
+hi def link solTypeDefIs         Keyword
 
 " Event
 syn match   solEvent             /\<event\>/ nextgroup=solEventName,solEventArgs skipwhite
@@ -161,3 +174,5 @@ hi def link solCommentTodo       Todo
 hi def link solNatSpec           Label
 hi def link solLineComment       Comment
 hi def link solComment           Comment
+
+let b:current_syntax = "solidity"

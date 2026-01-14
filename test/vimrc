@@ -1,0 +1,17 @@
+" Minimal vimrc for testing
+set nocompatible
+
+" Add vader.vim to runtimepath
+set rtp+=test/vader.vim
+
+" Add vim-solidity to runtimepath (PREPEND to override system files)
+set rtp^=.
+
+" Set indent defaults (4 spaces, expand tabs)
+set shiftwidth=4
+set tabstop=4
+set expandtab
+
+" Load filetype detection, plugins, and indent
+filetype plugin indent on
+syntax enable
